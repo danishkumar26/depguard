@@ -1,0 +1,19 @@
+[project]
+name = "depguard"
+version = "0.1.0"
+description = "Lightweight Python dependency vulnerability scanner using OSV.dev"
+requires-python = ">=3.8"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "danishkumar26"}]
+keywords = ["security", "vulnerability", "dependencies", "osv", "supply-chain"]
+
+[project.scripts]
+depguard = "depguard:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["depguard"]
