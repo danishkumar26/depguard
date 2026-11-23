@@ -152,6 +152,17 @@ class MainTests(unittest.TestCase):
         code = depguard.main(["/nonexistent/requirements.txt"])
         self.assertEqual(code, 2)
 
+    def test_exit_error_when_osv_unreachable(self):
+        with mock.patch(
+            "builtins.open", mock.mock_open(read_data="requests==2.28.0\n")
+        ):
+            with mock.patch(
+                "depguard.urllib.request.urlopen",
+                side_effect=urllib.error.URLError("dns failure"),
+            ):
+                code = depguard.main(["requirements.txt"])
+        self.assertEqual(code, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

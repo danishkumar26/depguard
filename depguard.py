@@ -114,7 +114,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"depguard: cannot read {args.requirements}: {exc}", file=sys.stderr)
         return EXIT_ERROR
 
-    findings = scan(requirements, args.ecosystem)
+    try:
+        findings = scan(requirements, args.ecosystem)
+    except OSError as exc:
+        print(f"depguard: cannot reach OSV.dev: {exc}", file=sys.stderr)
+        return EXIT_ERROR
 
     if not findings:
         print(f"depguard: no known vulnerabilities in {len(requirements)} package(s).")
