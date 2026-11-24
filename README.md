@@ -45,7 +45,7 @@ docker run --rm -v $(pwd)/requirements.txt:/requirements.txt depguard /requireme
 |------|---------|
 | 0    | No known vulnerabilities |
 | 1    | Vulnerabilities found |
-| 2    | Could not read the requirements file |
+| 2    | Could not read the requirements file, or OSV.dev is unreachable / returned invalid JSON |
 
 CI example (fail the build on vulnerable dependencies):
 

@@ -79,6 +79,10 @@ def query_osv(name: str, version: str | None, ecosystem: str = "PyPI") -> list[d
         if exc.code == 404:
             return []  # package not in the database
         raise
+    except json.JSONDecodeError as exc:
+        # HTML 500 pages, rate-limit pages, truncated bodies: fail closed like
+        # an unreachable OSV.dev instead of surfacing a raw traceback.
+        raise OSError(f"OSV.dev returned invalid JSON: {exc}") from exc
     return body.get("vulns", [])
 
 

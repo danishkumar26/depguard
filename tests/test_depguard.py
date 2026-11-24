@@ -163,6 +163,28 @@ class MainTests(unittest.TestCase):
                 code = depguard.main(["requirements.txt"])
         self.assertEqual(code, 2)
 
+    def test_exit_error_when_osv_returns_invalid_json(self):
+        body = b"<html><body>Internal Server Error</body></html>"
+
+        class _BadResponse:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self):
+                return body
+
+        with mock.patch(
+            "builtins.open", mock.mock_open(read_data="requests==2.28.0\n")
+        ):
+            with mock.patch(
+                "depguard.urllib.request.urlopen", return_value=_BadResponse()
+            ):
+                code = depguard.main(["requirements.txt"])
+        self.assertEqual(code, 2)
+
 
 if __name__ == "__main__":
     unittest.main()
